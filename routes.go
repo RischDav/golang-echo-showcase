@@ -14,5 +14,5 @@ func setupRoutes(e *echo.Echo, userHandler *user.Handler, kpiHandler *kpi.Handle
     e.GET("/allkpis", kpiHandler.GetAllKPI)
     e.GET("/kpi/:name", kpiHandler.GetKPI)
     e.POST("/kpi", kpiHandler.SetKPI)
-    
+    e.GET("/uptime", getUptime)
 }

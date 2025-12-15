@@ -8,7 +8,14 @@ import (
     "golang-echo-showcase/src/kpi"                      
     "golang-echo-showcase/src/user/sqlc/output"
     "log"
+    "time"
 )
+
+var starttime time.Time
+
+func init() {
+    starttime = time.Now()
+}
 
 func main() {
     e := echo.New()
@@ -44,4 +51,10 @@ func setupKPIHandler() *kpi.Handler {
         Service: service,  
     }
 }
+
+func getUptime(c echo.Context) error {
+    uptime := time.Since(starttime)
+    return c.String(200, uptime.String())
+}
+
 
