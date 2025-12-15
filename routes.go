@@ -6,11 +6,13 @@ import (
     "golang-echo-showcase/src/kpi"   
 )
 
-func DefineUserRoutes(e *echo.Echo, h *user.Handler) {
-    e.POST("/users/:firstname/:lastname", h.SaveUser)
-    e.GET("/users/:id", h.GetUser)
-    e.PUT("/users/:id", h.UpdateUser)
-    e.DELETE("/users/:id", h.DeleteUser)
-    e.POST("/kpis/:name/:value/:type", kpi.WriteKPI)
-    e.GET("/kpis/:name", kpi.GetKPI)
+func setupRoutes(e *echo.Echo, userHandler *user.Handler, kpiHandler *kpi.Handler) {
+    e.POST("/users", userHandler.SaveUser)
+    e.GET("/users", userHandler.GetUser)
+    e.PUT("/users/:id", userHandler.UpdateUserFirstname)
+    e.DELETE("/users/:id", userHandler.DeleteUser)
+    e.GET("/allkpis", kpiHandler.GetAllKPI)
+    e.GET("/kpi/:name", kpiHandler.GetKPI)
+    e.POST("/kpi", kpiHandler.SetKPI)
+    
 }

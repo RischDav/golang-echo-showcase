@@ -1,18 +1,16 @@
 # Golang Echo Showcase
 
-This application is a small Golang showcase using **SQLite** and **sqlc** (with future **Docker** support for running the software anywhere).
+This application is a small Golang showcase using SQLite and sqlc (with future Docker support for running the software anywhere).
 
----
-
-## Datenquellen (Data Sources)
+## Data Sources
 
 ### 1. User Database
-- A **SQLite** database storing user information.
-- Stores **first name** and **last name** of a user.
+- A SQLite database storing user information.
+- Stores first name and last name of a user.
 
 ### 2. KPIs Map
 - A map storing KPIs in the format: `name string: kpi int`.
-- Each KPI can have a **type**:
+- Each KPI can have a type:
   - **`count`**:  
     The initial integer value is added to the current hour number each full hour, then divided by the total number of hours the entry has existed.  
     *Example*:  
@@ -21,11 +19,9 @@ This application is a small Golang showcase using **SQLite** and **sqlc** (with 
   - **`value`**:  
     The stored integer remains unchanged without any calculations.
 
----
 
 ## Features
 
-- Perform standard **CRUD operations** on the User Database.
+- Perform standard CRUD operations on the User Database.
 - All available endpoints are listed in `routes.go`.
 
----

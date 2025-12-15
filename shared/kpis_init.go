@@ -1,16 +1,25 @@
 package shared
 
-var KPIs map[string]int
 
-func InitializeKPIs() {
-    KPIs = make(map[string]int)
+type KPIStore struct {
+    kpis  map[string]int
 }
 
-func GetKPI(name string) (int, bool) {
-    value, exists := KPIs[name]
+func NewKPIStore() *KPIStore {
+    return &KPIStore{
+        kpis: make(map[string]int),
+    }
+}
+
+func (s *KPIStore) GetKPI(name string) (int, bool) {
+    value, exists := s.kpis[name]
     return value, exists
 }
 
-func SetKPI(name string, value int) {
-    KPIs[name] = value
+func (s *KPIStore) SetKPI(name string, value int) {
+    s.kpis[name] = value
+}
+
+func (s *KPIStore) GetAllKPIs() map[string]int {
+    return s.kpis
 }

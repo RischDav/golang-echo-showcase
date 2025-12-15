@@ -1,50 +1,44 @@
 package kpi
 
 import (
-	"golang-echo-showcase/shared"
 	"net/http"
-	"fmt"
 	"github.com/labstack/echo/v4"
-	"strconv"
+	"fmt"
 )
 
-type KPIType string
-
-const (
-
-	// Wird pro Stunde aggregiert (eingegebene Zeit + jetzige Zeit / Stunden gesamt)
-    KPICount KPIType = "COUNT"
-	
-	// Speichert einfach ein wert
-    KPISave KPIType = "SAVE"
-)
-
-func GetKPI(c echo.Context) error {
-	kpiName := c.Param("name")
-	kpiValue, exists := shared.KPIs[kpiName]
-	if !exists {
-		return c.String(http.StatusNotFound, "KPI nicht gefunden: "+kpiName)
-	}
-	return c.String(http.StatusOK, fmt.Sprintf("KPI %s: %d", kpiName, kpiValue))
+type Handler struct {
+	Service *Service
 }
 
-func WriteKPI(c echo.Context) error {
-	kpiName := c.Param("name") 
-    kpiTypeStr := c.Param("type")
-    valueStr := c.Param("value")
-    valueInt, err := strconv.Atoi(valueStr)
+func (h *Handler) GetKPI(c echo.Context) error {
+	kpiName := c.Param("name")
+	
+	value, err := h.Service.GetKPI(c.Request().Context(), kpiName)
 	if err != nil {
-		return c.String(http.StatusBadRequest, "Ungültiger Wert für Value")
+		return c.String(http.StatusNotFound, err.Error())
 	}
+	
+	return c.String(http.StatusOK, fmt.Sprintf("KPI %s: %d", kpiName, value))
+}
 
-	switch kpiTypeStr {
-		case "KPICount":
-			kpiName += "_COUNT"
-		case "KPISave":
-			kpiName += "_SAVE"
-		default:
-			return fmt.Errorf("Falscher KPI-type")	
+func (h *Handler) SetKPI(c echo.Context) error {
+	kpiName := c.QueryParam("name")
+	kpiTypeStr := c.QueryParam("type")
+	valueStr := c.QueryParam("value")
+	
+	err := h.Service.SetKPI(c.Request().Context(), kpiName, kpiTypeStr, valueStr)
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
 	}
-	shared.KPIs[kpiName] = valueInt
-	return nil
+	
+	return c.NoContent(http.StatusOK)
+}
+
+func (h *Handler) GetAllKPI(c echo.Context) error {
+	value, err := h.Service.GetAllKPIs(c.Request().Context())
+	if err != nil {
+		return c.String(http.StatusNotFound, err.Error())
+	}
+	
+	return c.String(http.StatusOK, fmt.Println("%s", value))
 }
