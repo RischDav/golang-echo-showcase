@@ -50,7 +50,6 @@ func (s *Service) GetKPI(ctx context.Context, name string) (float64, error) {
         return average, nil
     }
 
-    // Normale KPIs
     return float64(value), nil
 }
 

@@ -25,3 +25,8 @@ This application is a small Golang showcase using SQLite and sqlc (with future D
 - Perform standard CRUD operations on the User Database.
 - All available endpoints are listed in `routes.go`.
 
+## Code explonation
+
+- In this code, I create a small example in Go using Echo and a local SQLite database.
+- I follow a modular structure similar to Nest.js. This has the advantage that multiple people can work on different endpoints without overwriting each other’s work.
+- Docker will be added later.
