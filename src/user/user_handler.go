@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"golang-echo-showcase/src/user/response"
+	"golang-echo-showcase/shared/response"
 	sqlc "golang-echo-showcase/src/user/sqlc/output"
 )
 
