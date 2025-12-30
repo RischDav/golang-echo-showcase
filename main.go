@@ -9,6 +9,7 @@ import (
     "golang-echo-showcase/src/user/sqlc/output"
     "log"
     "time"
+    "os"
 )
 
 var starttime time.Time
@@ -33,12 +34,15 @@ func main() {
 }
 
 func setupUserHandler() (*user.Handler, func() error) {
-    database, err := shared.NewDatabase("./shared/user.db")
+    dbPath := os.Getenv("USER_DB_PATH")
+    if dbPath == "" {
+        // Fallback für lokale Entwicklung
+        dbPath = "./shared/user.db" 
+    }
+    database, err := shared.NewDatabase(dbPath)
     if err != nil {
         log.Fatal("Datenbankfehler:", err)
     }
-    
-    
     queries := sqlc.New(database.DB)
     service := user.NewService(queries)
     return &user.Handler{Service: service}, database.CloseDatabase

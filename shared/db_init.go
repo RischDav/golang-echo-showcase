@@ -2,8 +2,8 @@ package shared
 
 import (
     "database/sql"
-    "golang-echo-showcase/src/user/sqlc/output"
-    _ "github.com/mattn/go-sqlite3" 
+    sqlc "golang-echo-showcase/src/user/sqlc/output"
+    _ "github.com/mattn/go-sqlite3"
 )
 
 type Database struct {
@@ -13,13 +13,27 @@ type Database struct {
 
 func NewDatabase(dataSourceName string) (*Database, error) {
     database, err := sql.Open("sqlite3", dataSourceName)
-    if err != nil { return nil, err }
-    
+    if err != nil {
+        return nil, err
+    }
+
+    _, err = database.Exec(`
+        CREATE TABLE IF NOT EXISTS user (
+            id        INTEGER PRIMARY KEY,
+            firstname TEXT NOT NULL,
+            lastname  TEXT NOT NULL
+        );
+    `)
+    if err != nil {
+        database.Close()
+        return nil, err
+    }
+
     queries := sqlc.New(database)
     return &Database{Queries: queries, DB: database}, nil
 }
 
-func (d* Database) CloseDatabase() error {
+func (d *Database) CloseDatabase() error {
     if d.DB != nil {
         return d.DB.Close()
     }
